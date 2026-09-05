@@ -1,6 +1,9 @@
+import type { ReactNode } from "react"
+
 export type AnaliseFitResponse = {
+    [x: string]: ReactNode
     scoreFit: number
-    pontosFortres: string
+    pontosFortes: string
     gaps: string
     cartaApresentacao: string
 }
