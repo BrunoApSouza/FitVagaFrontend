@@ -15,34 +15,38 @@ export default function AnaliseForm() {
         )
     const [error, setError] = useState('')
 
-    useEffect(() => {
-        async function carregarCurriculos() {
-            try {
-                const response =
-                    await fetch(
-                        `${API_URL}/api/Curriculos`
-                    )
+useEffect(() => {
+    async function carregarCurriculos() {
+        try {
+            const response = await fetch(
+                `${API_URL}/api/Curriculos`
+            )
 
-                const data =
-                    await response.json()
-
-                setCurriculos(data)
-
-                if (data.length > 0) {
-                    setCurriculoId(
-                        data[0].id.toString()
-                    )
-                }
-            } catch (error) {
-                console.error(
-                    'Erro ao carregar currículos',
-                    error
+            if (!response.ok) {
+                throw new Error(
+                    `Erro ao consultar currículos: HTTP ${response.status}`
                 )
             }
-        }
 
-        carregarCurriculos()
-    }, [])
+            const data: Curriculo[] = await response.json()
+
+            setCurriculos(data)
+
+            if (data.length > 0) {
+                setCurriculoId(String(data[0].id))
+            } else {
+                setCurriculoId('')
+            }
+        } catch (error) {
+            console.error(
+                'Erro ao carregar currículos:',
+                error
+            )
+        }
+    }
+
+    carregarCurriculos()
+}, [])
 
     async function handleSubmit(
         e: React.FormEvent
